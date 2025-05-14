@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalized Fitness & Nutrition Planner</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="app.js"></script>
+  <script src="assets/chart.min.js"></script>
+</head>
+<body>
+  <header>
+    <div style="display:flex; align-items:center; justify-content:center; gap:1rem; cursor:pointer;" id="logo-link">
+      <img src="./logo.jpg" alt="Logo" style="height:148px; width:auto; border-radius:12px; box-shadow:0 2px 8px rgba(35,41,70,0.08);">
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#profile" id="nav-profile">Profil</a></li>
+        <li><a href="#meal" id="nav-meal">Plan Alimentar</a></li>
+        <li><a href="#workout" id="nav-workout">Antrenamente</a></li>
+        <li><a href="#progress" id="nav-progress">Progres</a></li>
+        <li><a href="#dashboard" id="nav-dashboard">Tablou de Bord</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section id="profile-section" class="app-section">
+      <h2>Profil Utilizator</h2>
+      <form id="profile-form">
+        <label for="name">Nume</label>
+        <input type="text" id="name" name="name" required placeholder="Introdu numele tău">
+        <label for="bodyType">Tip Somatic</label>
+        <div id="bodyType-options" style="display:flex; gap:1.5rem; margin-bottom:1.2rem; justify-content:center;">
+          <label style="text-align:center; cursor:pointer;">
+            <input type="radio" name="bodyType" value="ectomorf" style="display:none;">
+            <img src="assets/ectomorf.svg" alt="Ectomorf" title="Ectomorf: Slab, metabolism rapid" style="width:60px; display:block; margin:auto;">
+            <div style="font-size:0.95rem; margin-top:0.3rem;">Ectomorf</div>
+            <div style="font-size:0.8rem; color:#888;">Slab, metabolism rapid</div>
+          </label>
+          <label style="text-align:center; cursor:pointer;">
+            <input type="radio" name="bodyType" value="mezomorf" style="display:none;">
+            <img src="assets/mezomorf.svg" alt="Mezomorf" title="Mezomorf: Atletic, echilibrat" style="width:60px; display:block; margin:auto;">
+            <div style="font-size:0.95rem; margin-top:0.3rem;">Mezomorf</div>
+            <div style="font-size:0.8rem; color:#888;">Atletic, echilibrat</div>
+          </label>
+          <label style="text-align:center; cursor:pointer;">
+            <input type="radio" name="bodyType" value="endomorf" style="display:none;">
+            <img src="assets/endomorf.svg" alt="Endomorf" title="Endomorf: Solid, predispus la acumulare de grasime" style="width:60px; display:block; margin:auto;">
+            <div style="font-size:0.95rem; margin-top:0.3rem;">Endomorf</div>
+            <div style="font-size:0.8rem; color:#888;">Solid, predispus la grasime</div>
+          </label>
+        </div>
+        <label for="goal">Obiectiv Fitness</label>
+        <select id="goal" name="goal" required>
+          <option value="">Alege obiectivul</option>
+          <option value="muscle">Creștere masă musculară</option>
+          <option value="weightloss">Slăbire</option>
+          <option value="maintenance">Menținere</option>
+        </select>
+        <label for="diet">Preferință Dietă</label>
+        <select id="diet" name="diet" required>
+          <option value="">Alege dieta</option>
+          <option value="none">Fără preferință</option>
+          <option value="vegetarian">Vegetarian</option>
+          <option value="keto">Keto</option>
+          <option value="glutenfree">Fără gluten</option>
+          <option value="vegan">Vegan</option>
+        </select>
+        <label for="age">Vârstă</label>
+        <input type="number" id="age" name="age" min="10" max="100" required>
+        <label for="weight">Greutate (kg)</label>
+        <input type="number" id="weight" name="weight" min="30" max="250" required>
+        <label for="gender">Gen</label>
+        <select id="gender" name="gender" required>
+          <option value="">Alege genul</option>
+          <option value="male">Masculin</option>
+          <option value="female">Feminin</option>
+          <option value="other">Altul</option>
+        </select>
+        <label for="activity">Nivel Activitate</label>
+        <select id="activity" name="activity" required>
+          <option value="">Alege nivelul</option>
+          <option value="sedentary">Sedentar</option>
+          <option value="light">Ușor activ</option>
+          <option value="moderate">Moderate activ</option>
+          <option value="active">Activ</option>
+          <option value="veryactive">Foarte activ</option>
+        </select>
+        <button type="submit">Salvează Profilul</button>
+      </form>
+      <div id="profile-success" style="display:none; color:#2ecc40; font-weight:600; margin-top:1rem;">Profil salvat!</div>
+      <div id="saved-profiles-section" style="margin-top:2.5rem;">
+        <h3>Profiluri salvate</h3>
+        <ul id="saved-profiles-list" style="display:flex; flex-wrap:wrap; gap:1rem; list-style:none; padding:0; margin:0;"></ul>
+      </div>
+    </section>
+    <section id="meal-section" class="app-section" style="display:none;">
+      <h2>Plan Alimentar</h2>
+      <button id="generate-meal-plan" class="btn">Generează Planul Săptămânal</button>
+      <div id="meal-plan-container" style="margin-top:2rem; display:none;">
+        <h3>Planul Alimentar al Săptămânii</h3>
+        <table id="meal-plan-table" style="width:100%; border-collapse:collapse; margin-bottom:2rem;">
+          <thead>
+            <tr style="background:#e0eafc; color:#232946;">
+              <th style="padding:0.5rem; border-radius:8px 0 0 8px;">Zi</th>
+              <th style="padding:0.5rem;">Mic dejun</th>
+              <th style="padding:0.5rem;">Prânz</th>
+              <th style="padding:0.5rem; border-radius:0 8px 8px 0;">Cină</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Mesele vor fi inserate aici -->
+          </tbody>
+        </table>
+        <h3>Listă de Cumpărături</h3>
+        <ul id="shopping-list" style="background:#fffbe6; border-radius:10px; padding:1rem 1.5rem; box-shadow:0 1px 4px rgba(35,41,70,0.06);"></ul>
+      </div>
+    </section>
+    <section id="workout-section" class="app-section" style="display:none;">
+      <h2>Antrenamente Recomandate</h2>
+      <label for="workout-difficulty">Nivel Dificultate</label>
+      <select id="workout-difficulty" style="max-width:220px; margin-bottom:1rem;">
+        <option value="beginner">Începător</option>
+        <option value="intermediate">Intermediar</option>
+        <option value="advanced">Avansat</option>
+      </select>
+      <button id="generate-workout-plan" class="btn">Generează Planul de Antrenament</button>
+      <div id="workout-plan-container" style="margin-top:2rem; display:none;">
+        <h3>Planul de Antrenament al Săptămânii</h3>
+        <table id="workout-plan-table" style="width:100%; border-collapse:collapse; margin-bottom:2rem;">
+          <thead>
+            <tr style="background:#e0eafc; color:#232946;">
+              <th style="padding:0.5rem; border-radius:8px 0 0 8px;">Zi</th>
+              <th style="padding:0.5rem;">Exercițiu</th>
+              <th style="padding:0.5rem;">Serii</th>
+              <th style="padding:0.5rem;">Repetări</th>
+              <th style="padding:0.5rem; border-radius:0 8px 8px 0;">Pauză</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Exercițiile vor fi inserate aici -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section id="progress-section" class="app-section" style="display:none;">
+      <h2>Monitorizare Progres</h2>
+      <form id="progress-form" style="margin-bottom:1.5rem;">
+        <label for="log-date">Dată</label>
+        <input type="date" id="log-date" name="log-date" required>
+        <label for="log-weight">Greutate (kg)</label>
+        <input type="number" id="log-weight" name="log-weight" min="30" max="250" required>
+        <label for="log-workout">Antrenament Efectuat</label>
+        <input type="text" id="log-workout" name="log-workout" placeholder="ex: Flotări, Genuflexiuni" required>
+        <button type="submit">Adaugă în Jurnal</button>
+      </form>
+      <h3>Jurnal Progres</h3>
+      <table id="progress-log-table" style="width:100%; border-collapse:collapse; margin-bottom:2rem;">
+        <thead>
+          <tr style="background:#e0eafc; color:#232946;">
+            <th style="padding:0.5rem; border-radius:8px 0 0 8px;">Dată</th>
+            <th style="padding:0.5rem;">Greutate (kg)</th>
+            <th style="padding:0.5rem;">Antrenament</th>
+            <th style="padding:0.5rem; border-radius:0 8px 8px 0;">Șterge</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Progresul va fi inserat aici -->
+        </tbody>
+      </table>
+    </section>
+    <section id="dashboard-section" class="app-section" style="display:none;">
+      <h2>Tablou de Bord</h2>
+      <div id="dashboard-welcome" style="font-size:1.2rem; margin-bottom:1.5rem; color:#232946; font-weight:600;"></div>
+      <div id="dashboard-stats" style="display:flex; flex-wrap:wrap; gap:1.5rem; margin-bottom:2rem;">
+        <div class="dashboard-card" style="flex:1; min-width:180px; background:#e0eafc; border-radius:12px; padding:1.2rem; box-shadow:0 1px 4px rgba(35,41,70,0.06);">
+          <div style="font-size:1.1rem; font-weight:500;">Profil</div>
+          <div id="dashboard-profile"></div>
+        </div>
+        <div class="dashboard-card" style="flex:1; min-width:180px; background:#e0eafc; border-radius:12px; padding:1.2rem; box-shadow:0 1px 4px rgba(35,41,70,0.06);">
+          <div style="font-size:1.1rem; font-weight:500;">Mese Săptămâna Aceasta</div>
+          <div id="dashboard-meals"></div>
+        </div>
+        <div class="dashboard-card" style="flex:1; min-width:180px; background:#e0eafc; border-radius:12px; padding:1.2rem; box-shadow:0 1px 4px rgba(35,41,70,0.06);">
+          <div style="font-size:1.1rem; font-weight:500;">Antrenamente Săptămâna Aceasta</div>
+          <div id="dashboard-workouts"></div>
+        </div>
+        <div class="dashboard-card" style="flex:1; min-width:180px; background:#e0eafc; border-radius:12px; padding:1.2rem; box-shadow:0 1px 4px rgba(35,41,70,0.06);">
+          <div style="font-size:1.1rem; font-weight:500;">Jurnal Progres</div>
+          <div id="dashboard-progress"></div>
+        </div>
+      </div>
+      <div id="dashboard-motivation" style="font-size:1.1rem; color:#3e497a; font-weight:600; text-align:center;"></div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 Planificator Fitness & Nutriție</p>
+  </footer>
+</body>
+</html> 
